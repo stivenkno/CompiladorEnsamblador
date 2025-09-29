@@ -1,0 +1,22 @@
+_start:
+    # Load max positive 32-bit integer (2147483647)
+    lui a0, 524287      # Load upper 20 bits (524287 * 4096 = 2147479552)
+    addi a0, a0, 4095   # Add lower 12 bits (4095), total = 2147483647
+
+    # Load 1
+    addi a1, zero, 1  
+
+    # This should cause overflow: 2147483647 + 1 = -2147483648 (two's complement wrap-around)
+    add a2, a0, a1  
+
+    # Load min negative 32-bit integer (-2147483648)
+    lui a0, 524288      # Load upper 20 bits (524288 * 4096 = 2147483648, interpreted as -2147483648 in two's complement)
+
+    # Load -1
+    addi a1, zero, -1  
+
+    # This should cause underflow: -2147483648 - 1 = 2147483647 (two's complement wrap-around)
+    add a3, a0, a1  
+
+    # Exit program
+    addi a7, zero, 93   # System call for exit
